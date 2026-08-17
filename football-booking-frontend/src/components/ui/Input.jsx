@@ -1,0 +1,36 @@
+export default function Input({ label, error, ...inputProps }) {
+  return (
+    <div style={{ marginBottom: "1.25rem" }}>
+      {label && (
+        <label
+          style={{
+            display: "block",
+            marginBottom: "0.4rem",
+            fontWeight: 600,
+            fontSize: "0.9rem",
+            color: "var(--color-text)",
+          }}
+        >
+          {label}
+        </label>
+      )}
+      <input
+        {...inputProps}
+        style={{
+          width: "100%",
+          padding: "0.7rem 0.9rem",
+          borderRadius: "var(--radius-sm)",
+          border: `1.5px solid ${error ? "var(--color-error)" : "var(--color-border)"}`,
+          fontSize: "0.95rem",
+          fontFamily: "var(--font-body)",
+          outline: "none",
+        }}
+      />
+      {error && (
+        <p style={{ color: "var(--color-error)", fontSize: "0.82rem", margin: "0.35rem 0 0" }}>
+          {error}
+        </p>
+      )}
+    </div>
+  );
+}
