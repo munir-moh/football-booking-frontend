@@ -21,7 +21,7 @@ export default function Input({ label, error, ...inputProps }) {
           padding: "0.7rem 0.9rem",
           borderRadius: "var(--radius-sm)",
           border: `1.5px solid ${error ? "var(--color-error)" : "var(--color-border)"}`,
-          fontSize: "0.95rem",
+          fontSize: "16px",
           fontFamily: "var(--font-body)",
           outline: "none",
         }}

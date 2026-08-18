@@ -1,10 +1,11 @@
 export default function Button({
   children,
-  variant = "primary", // "primary" | "secondary" | "ghost"
+  variant = "primary",
   loading = false,
   disabled = false,
   type = "button",
   onClick,
+  fullWidth = false,
 }) {
   const base = {
     padding: "0.75rem 1.5rem",
@@ -16,6 +17,7 @@ export default function Button({
     border: "2px solid transparent",
     transition: "all 0.15s ease",
     opacity: disabled ? 0.6 : 1,
+    width: fullWidth ? "100%" : "auto",
   };
 
   const variants = {

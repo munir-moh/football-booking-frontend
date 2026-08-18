@@ -100,14 +100,14 @@ export default function HomePage() {
                 value={form.name}
                 onChange={(e) => handleChange("name", e.target.value)}
                 error={errors.name}
-                placeholder="e.g. Ada Obi"
+                placeholder="e.g. Munir Mohammed"
               />
               <Input
                 label="Phone Number"
                 value={form.phone}
                 onChange={(e) => handleChange("phone", e.target.value)}
                 error={errors.phone}
-                placeholder="e.g. 08012345678"
+                placeholder="e.g. 08123456789"
               />
               <Input
                 label="Date"
@@ -136,7 +136,7 @@ export default function HomePage() {
                     padding: "0.7rem 0.9rem",
                     borderRadius: "var(--radius-sm)",
                     border: "1.5px solid var(--color-border)",
-                    fontSize: "0.95rem",
+                    fontSize: "16px",
                   }}
                 >
                   {DURATION_OPTIONS.map((h) => (
@@ -147,7 +147,7 @@ export default function HomePage() {
                 </select>
               </div>
 
-              <Button type="submit" loading={loading} disabled={loading}>
+              <Button type="submit" loading={loading} disabled={loading} fullWidth>
                 Book Now
               </Button>
             </form>

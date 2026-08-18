@@ -66,7 +66,7 @@ export default function AdminLoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
               />
-              <Button type="submit" loading={loading} disabled={loading}>
+              <Button type="submit" loading={loading} disabled={loading} fullWidth>
                 Log In
               </Button>
             </form>

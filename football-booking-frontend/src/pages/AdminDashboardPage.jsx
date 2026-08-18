@@ -86,7 +86,10 @@ export default function AdminDashboardPage() {
               <EmptyState message="No bookings yet." />
             ) : (
               <div style={{ overflowX: "auto" }}>
-                <table style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.88rem" }}>
+                <table
+                  className="responsive-table"
+                  style={{ width: "100%", borderCollapse: "collapse", fontSize: "0.88rem" }}
+                >
                   <thead>
                     <tr
                       style={{
@@ -117,16 +120,28 @@ export default function AdminDashboardPage() {
                           transition: "background 0.15s ease",
                         }}
                       >
-                        <td style={{ padding: "0.85rem 1rem", fontWeight: 600 }}>{b.reference}</td>
-                        <td style={{ padding: "0.85rem 1rem" }}>{b.name}</td>
-                        <td style={{ padding: "0.85rem 1rem" }}>{b.phone}</td>
-                        <td style={{ padding: "0.85rem 1rem" }}>{b.date}</td>
-                        <td style={{ padding: "0.85rem 1rem" }}>{b.time}</td>
-                        <td style={{ padding: "0.85rem 1rem" }}>₦{Number(b.price).toLocaleString()}</td>
-                        <td style={{ padding: "0.85rem 1rem" }}>
+                        <td data-label="Reference" style={{ padding: "0.85rem 1rem", fontWeight: 600 }}>
+                          {b.reference}
+                        </td>
+                        <td data-label="Name" style={{ padding: "0.85rem 1rem" }}>
+                          {b.name}
+                        </td>
+                        <td data-label="Phone" style={{ padding: "0.85rem 1rem" }}>
+                          {b.phone}
+                        </td>
+                        <td data-label="Date" style={{ padding: "0.85rem 1rem" }}>
+                          {b.date}
+                        </td>
+                        <td data-label="Time" style={{ padding: "0.85rem 1rem" }}>
+                          {b.time}
+                        </td>
+                        <td data-label="Price" style={{ padding: "0.85rem 1rem" }}>
+                          ₦{Number(b.price).toLocaleString()}
+                        </td>
+                        <td data-label="Status" style={{ padding: "0.85rem 1rem" }}>
                           <StatusBadge status={b.status} />
                         </td>
-                        <td style={{ padding: "0.85rem 1rem" }}>
+                        <td data-label="" style={{ padding: "0.85rem 1rem" }}>
                           {b.status === "Pending" && (
                             <Button
                               variant="secondary"
