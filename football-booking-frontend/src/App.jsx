@@ -7,6 +7,7 @@ import ConfirmationPage from "./pages/ConfirmationPage";
 import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
+import ChatWidget from "./components/chat/ChatWidget";
 
 export default function App() {
   return ( 
@@ -27,6 +28,7 @@ export default function App() {
           />
         </Routes>
         <Footer />
+        <ChatWidget />
       </BrowserRouter>
     </AdminAuthProvider>
   );
