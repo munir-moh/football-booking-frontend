@@ -53,7 +53,7 @@ export default function ChatWidget() {
             overflow: "hidden",
           }}
         >
-          {/* Header */}
+
           <div
             style={{
               background: "var(--color-primary)",
@@ -75,7 +75,6 @@ export default function ChatWidget() {
             </span>
           </div>
 
-          {/* Messages */}
           <div style={{ flex: 1, overflowY: "auto", padding: "1rem", display: "flex", flexDirection: "column", gap: "0.6rem" }}>
             {messages.map((m, i) => (
               <div
@@ -113,7 +112,6 @@ export default function ChatWidget() {
             <div ref={messagesEndRef} />
           </div>
 
-          {/* Input row */}
           <div style={{ display: "flex", borderTop: "1px solid var(--color-border)", padding: "0.6rem" }}>
             <input
               value={inputValue}
@@ -153,7 +151,6 @@ export default function ChatWidget() {
         </div>
       )}
 
-      {/* Toggle button */}
       <button
         onClick={() => setIsOpen((prev) => !prev)}
         style={{
