@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { sendChatMessage } from "../../services/aiService";
 
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -6,26 +7,30 @@ export default function ChatWidget() {
     { role: "assistant", content: "Hi! Ask me about pricing, availability, or the pitch's facilities." }
   ]);
   const [inputValue, setInputValue] = useState("");
+  const [isSending, setIsSending] = useState(false);
   const messagesEndRef = useRef(null);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isOpen]);
 
-  function handleSend() {
+  async function handleSend() {
     const trimmed = inputValue.trim();
-    if (!trimmed) return;
+    if (!trimmed || isSending) return;
 
+    const priorMessages = messages;
     setMessages((prev) => [...prev, { role: "user", content: trimmed }]);
     setInputValue("");
+    setIsSending(true);
 
-    // TEMPORARY placeholder — Step 9 replaces this with a real API call.
-    setTimeout(() => {
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: "(placeholder reply — not connected to the AI yet)" }
-      ]);
-    }, 400);
+    try {
+      const reply = await sendChatMessage(trimmed, priorMessages);
+      setMessages((prev) => [...prev, { role: "assistant", content: reply }]);
+    } catch (error) {
+      setMessages((prev) => [...prev, { role: "assistant", content: error.message }]);
+    } finally {
+      setIsSending(false);
+    }
   }
 
   function handleKeyDown(e) {
@@ -89,6 +94,22 @@ export default function ChatWidget() {
                 {m.content}
               </div>
             ))}
+            {isSending && (
+              <div
+                style={{
+                  alignSelf: "flex-start",
+                  background: "var(--color-bg)",
+                  color: "var(--color-text-muted)",
+                  padding: "0.6rem 0.9rem",
+                  borderRadius: "var(--radius-md)",
+                  maxWidth: "80%",
+                  fontSize: "0.9rem",
+                  fontFamily: "var(--font-body)",
+                }}
+              >
+                Thinking…
+              </div>
+            )}
             <div ref={messagesEndRef} />
           </div>
 
@@ -99,6 +120,7 @@ export default function ChatWidget() {
               onChange={(e) => setInputValue(e.target.value)}
               onKeyDown={handleKeyDown}
               placeholder="Ask a question…"
+              disabled={isSending}
               style={{
                 flex: 1,
                 border: "1px solid var(--color-border)",
@@ -111,6 +133,7 @@ export default function ChatWidget() {
             />
             <button
               onClick={handleSend}
+              disabled={isSending}
               style={{
                 marginLeft: "0.5rem",
                 background: "var(--color-accent)",
@@ -120,10 +143,11 @@ export default function ChatWidget() {
                 padding: "0.5rem 0.9rem",
                 fontFamily: "var(--font-heading)",
                 fontWeight: 600,
-                cursor: "pointer",
+                cursor: isSending ? "not-allowed" : "pointer",
+                opacity: isSending ? 0.6 : 1,
               }}
             >
-              Send
+              {isSending ? "…" : "Send"}
             </button>
           </div>
         </div>
