@@ -125,7 +125,7 @@ export default function ChatWidget() {
                 borderRadius: "var(--radius-sm)",
                 padding: "0.5rem 0.7rem",
                 fontFamily: "var(--font-body)",
-                fontSize: "0.9rem",
+                fontSize: "16px",
                 outline: "none",
               }}
             />

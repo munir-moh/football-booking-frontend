@@ -18,12 +18,15 @@ export default function Input({ label, error, ...inputProps }) {
         {...inputProps}
         style={{
           width: "100%",
+          boxSizing: "border-box",
           padding: "0.7rem 0.9rem",
           borderRadius: "var(--radius-sm)",
           border: `1.5px solid ${error ? "var(--color-error)" : "var(--color-border)"}`,
           fontSize: "16px",
           fontFamily: "var(--font-body)",
           outline: "none",
+          appearance: "none",
+          WebkitAppearance: "none",
         }}
       />
       {error && (
