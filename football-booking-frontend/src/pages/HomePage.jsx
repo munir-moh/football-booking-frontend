@@ -38,6 +38,14 @@ export default function HomePage() {
     return Object.keys(newErrors).length === 0;
   }
 
+  function getTodayDateString() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0");
+    const day = String(today.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setSubmitError("");
@@ -85,7 +93,7 @@ export default function HomePage() {
           Book Your Pitch,<br />Play Today
         </h1>
         <p style={{ color: "rgba(255,255,255,0.75)", maxWidth: "380px", margin: "0 auto", fontSize: "0.95rem" }}>
-          Reserve your slot in seconds. No calls, no waiting — just pick a time and play.
+          Reserve your slot in seconds. No calls, no waiting, just pick a time and play.
         </p>
       </div>
 
@@ -115,6 +123,7 @@ export default function HomePage() {
                 value={form.date}
                 onChange={(e) => handleChange("date", e.target.value)}
                 error={errors.date}
+                min={getTodayDateString()}
               />
               <Input
                 label="Start Time"

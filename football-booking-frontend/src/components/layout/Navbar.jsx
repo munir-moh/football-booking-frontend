@@ -37,20 +37,6 @@ export default function Navbar() {
           Elite Football Pitch
         </span>
       </Link>
-      <Link
-        to="/admin"
-        style={{
-          color: "var(--color-accent)",
-          textDecoration: "none",
-          fontWeight: 600,
-          fontSize: "0.88rem",
-          padding: "0.5rem 1rem",
-          border: "1.5px solid rgba(232, 161, 61, 0.4)",
-          borderRadius: "var(--radius-sm)",
-        }}
-      >
-        Admin
-      </Link>
     </nav>
   );
 }
