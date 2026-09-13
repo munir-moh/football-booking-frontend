@@ -6,6 +6,8 @@ import Input from "../components/ui/Input";
 import Button from "../components/ui/Button";
 import Alert from "../components/ui/Alert";
 import { createBooking } from "../services/bookingService";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 const DURATION_OPTIONS = [1, 2, 3, 4, 5];
 
@@ -38,12 +40,18 @@ export default function HomePage() {
     return Object.keys(newErrors).length === 0;
   }
 
-  function getTodayDateString() {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const day = String(today.getDate()).padStart(2, "0");
+  function formatDateForForm(date) {
+    if (!date) return "";
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
+  }
+
+  function parseFormDate(dateStr) {
+    if (!dateStr) return null;
+    const [year, month, day] = dateStr.split("-").map(Number);
+    return new Date(year, month - 1, day);
   }
 
   async function handleSubmit(e) {
@@ -117,14 +125,26 @@ export default function HomePage() {
                 error={errors.phone}
                 placeholder="e.g. 08123456789"
               />
-              <Input
-                label="Date"
-                type="date"
-                value={form.date}
-                onChange={(e) => handleChange("date", e.target.value)}
-                error={errors.date}
-                min={getTodayDateString()}
-              />
+
+              <div style={{ marginBottom: "1.25rem" }}>
+                <label style={{ display: "block", marginBottom: "0.4rem", fontWeight: 600, fontSize: "0.9rem", color: "var(--color-text)" }}>
+                  Date
+                </label>
+                <DatePicker
+                  selected={parseFormDate(form.date)}
+                  onChange={(date) => handleChange("date", formatDateForForm(date))}
+                  minDate={new Date(new Date().setHours(0, 0, 0, 0))}
+                  dateFormat="yyyy-MM-dd"
+                  placeholderText="Select a date"
+                  className="custom-datepicker-input"
+                />
+                {errors.date && (
+                  <p style={{ color: "var(--color-error)", fontSize: "0.82rem", margin: "0.35rem 0 0" }}>
+                    {errors.date}
+                  </p>
+                )}
+              </div>
+
               <Input
                 label="Start Time"
                 type="time"
