@@ -154,6 +154,7 @@ export default function HomePage() {
               <Input
                 label="Start Time"
                 type="time"
+                step="1800"
                 value={form.startTime}
                 onChange={(e) => handleChange("startTime", e.target.value)}
                 error={errors.startTime}
