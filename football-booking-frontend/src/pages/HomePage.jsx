@@ -33,7 +33,12 @@ export default function HomePage() {
   function validate() {
     const newErrors = {};
     if (!form.name.trim()) newErrors.name = "Please enter your full name.";
-    if (!form.phone.trim()) newErrors.phone = "Please enter your phone number.";
+    const trimmedPhone = form.phone.trim();
+    if (!trimmedPhone) {
+      newErrors.phone = "Please enter your phone number.";
+    } else if (!/^\d{11}$/.test(trimmedPhone)) {
+      newErrors.phone = "Phone number must be exactly 11 digits.";
+    }
     if (!form.date) newErrors.date = "Please choose a date.";
     if (!form.startTime) newErrors.startTime = "Please choose a start time.";
     setErrors(newErrors);
@@ -121,9 +126,10 @@ export default function HomePage() {
               <Input
                 label="Phone Number"
                 value={form.phone}
-                onChange={(e) => handleChange("phone", e.target.value)}
+                onChange={(e) => handleChange("phone", e.target.value.replace(/\D/g, "").slice(0, 11))}
                 error={errors.phone}
                 placeholder="e.g. 08123456789"
+                inputMode="numeric"
               />
 
               <div style={{ marginBottom: "1.25rem" }}>
