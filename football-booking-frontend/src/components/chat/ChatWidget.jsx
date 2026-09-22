@@ -1,5 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import { sendChatMessage } from "../../services/aiService";
+import ReactMarkdown from "react-markdown";
+
+const markdownComponents = {
+  p: ({ children }) => <p style={{ margin: "0 0 0.5rem", lineHeight: 1.5 }}>{children}</p>,
+  ul: ({ children }) => <ul style={{ margin: "0 0 0.5rem", paddingLeft: "1.1rem", lineHeight: 1.5 }}>{children}</ul>,
+  li: ({ children }) => <li style={{ marginBottom: "0.25rem" }}>{children}</li>,
+  strong: ({ children }) => <strong style={{ fontWeight: 700 }}>{children}</strong>,
+};
 
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -90,7 +98,13 @@ export default function ChatWidget() {
                   fontFamily: "var(--font-body)",
                 }}
               >
-                {m.content}
+                {m.role === "assistant" ? (
+                  <div className="chat-markdown">
+                    <ReactMarkdown components={markdownComponents}>{m.content}</ReactMarkdown>
+                  </div>
+                ) : (
+                  m.content
+                )}
               </div>
             ))}
             {isSending && (

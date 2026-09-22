@@ -95,6 +95,10 @@ input[type="date"]::-webkit-datetime-edit {
   padding: 0;
 }
 
+.chat-markdown > *:last-child {
+  margin-bottom: 0;
+}
+
 @media (max-width: 640px) {
   .responsive-table thead {
     display: none;
