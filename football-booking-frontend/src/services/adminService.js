@@ -1,6 +1,5 @@
 import api from "./api";
 
-// Fetches all bookings. Requires the admin password.
 export async function getBookings(adminPassword) {
   try {
     const response = await api.get("/api/admin/bookings", {
@@ -15,7 +14,6 @@ export async function getBookings(adminPassword) {
   }
 }
 
-// Marks a booking as confirmed. Requires the admin password.
 export async function confirmBooking(reference, adminPassword) {
   try {
     const response = await api.post(
@@ -27,5 +25,17 @@ export async function confirmBooking(reference, adminPassword) {
   } catch (error) {
     const backendMessage = error.response?.data?.error;
     throw new Error(backendMessage || "Could not confirm this booking.");
+  }
+}
+
+export async function deleteBooking(reference, adminPassword) {
+  try {
+    const response = await api.delete(`/api/admin/booking/${reference}`, {
+      headers: { "X-ADMIN-PASSWORD": adminPassword },
+    });
+    return response.data;
+  } catch (error) {
+    const backendMessage = error.response?.data?.error;
+    throw new Error(backendMessage || "Could not delete this booking.");
   }
 }

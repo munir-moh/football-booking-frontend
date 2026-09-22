@@ -34,6 +34,11 @@ export default function Button({
       color: "var(--color-primary)",
       borderColor: "var(--color-border)",
     },
+    "ghost-light": {
+    background: "transparent",
+    color: "#fff",
+    borderColor: "rgba(255, 255, 255, 0.4)",
+    },
   };
 
   return (

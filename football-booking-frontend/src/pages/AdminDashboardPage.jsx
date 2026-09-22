@@ -7,7 +7,7 @@ import Spinner from "../components/ui/Spinner";
 import EmptyState from "../components/ui/EmptyState";
 import StatusBadge from "../components/ui/StatusBadge";
 import { useAdminAuth } from "../context/AdminAuthContext";
-import { getBookings, confirmBooking } from "../services/adminService";
+import { getBookings, confirmBooking, deleteBooking } from "../services/adminService";
 
 export default function AdminDashboardPage() {
   const { adminPassword, logout } = useAdminAuth();
@@ -17,6 +17,7 @@ export default function AdminDashboardPage() {
   const [error, setError] = useState("");
   const [confirmingRef, setConfirmingRef] = useState(null);
   const [hoveredRow, setHoveredRow] = useState(null);
+  const [deletingRef, setDeletingRef] = useState(null);
 
   useEffect(() => {
     loadBookings();
@@ -49,6 +50,23 @@ export default function AdminDashboardPage() {
     }
   }
 
+  async function handleDelete(reference) {
+    const confirmed = window.confirm(
+      `Are you sure you want to delete booking ${reference}? This cannot be undone, and the slot will become available again.`
+    );
+    if (!confirmed) return;
+
+    setDeletingRef(reference);
+    try {
+      await deleteBooking(reference, adminPassword);
+      setBookings((prev) => prev.filter((b) => b.reference !== reference));
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setDeletingRef(null);
+    }
+  }
+
   const pendingCount = bookings.filter((b) => b.status === "Pending").length;
 
   return (
@@ -67,7 +85,7 @@ export default function AdminDashboardPage() {
               {loading ? "Loading…" : `${bookings.length} total · ${pendingCount} pending`}
             </p>
           </div>
-          <Button variant="ghost" onClick={logout}>
+          <Button variant="ghost-light" onClick={logout}>
             Log Out
           </Button>
         </div>
@@ -141,17 +159,25 @@ export default function AdminDashboardPage() {
                         <td data-label="Status" style={{ padding: "0.85rem 1rem" }}>
                           <StatusBadge status={b.status} />
                         </td>
-                        <td data-label="" style={{ padding: "0.85rem 1rem" }}>
+                        <td data-label="" style={{ padding: "0.85rem 1rem", display: "flex", gap: "0.5rem" }}>
                           {b.status === "Pending" && (
                             <Button
                               variant="secondary"
                               loading={confirmingRef === b.reference}
-                              disabled={confirmingRef === b.reference}
+                              disabled={confirmingRef === b.reference || deletingRef === b.reference}
                               onClick={() => handleConfirm(b.reference)}
                             >
                               Confirm
                             </Button>
                           )}
+                          <Button
+                            variant="ghost"
+                            loading={deletingRef === b.reference}
+                            disabled={confirmingRef === b.reference || deletingRef === b.reference}
+                            onClick={() => handleDelete(b.reference)}
+                          >
+                            Delete
+                          </Button>
                         </td>
                       </tr>
                     ))}
