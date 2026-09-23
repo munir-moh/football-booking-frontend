@@ -47,6 +47,7 @@ export default function PaymentCallbackPage() {
             <h2 style={{ fontFamily: "var(--font-heading)" }}>Booking Confirmed!</h2>
             <Alert type="success">
               Your payment was successful and your slot is booked. Reference: {reference}
+              NOTE: Come along with the receipt sent to your email or the reference number above for verification at the pitch. Thank you for booking with us!
             </Alert>
             <Button variant="primary" onClick={() => (window.location.href = "/")}>
               Back to Home
