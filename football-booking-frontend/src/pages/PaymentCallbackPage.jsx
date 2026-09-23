@@ -44,7 +44,7 @@ export default function PaymentCallbackPage() {
 
         {status === "Confirmed" && (
           <>
-            <h2 style={{ fontFamily: "var(--font-heading)" }}>Booking Confirmed! ✅</h2>
+            <h2 style={{ fontFamily: "var(--font-heading)" }}>Booking Confirmed!</h2>
             <Alert type="success">
               Your payment was successful and your slot is booked. Reference: {reference}
             </Alert>
