@@ -67,7 +67,14 @@ export default function AdminDashboardPage() {
     }
   }
 
-  const pendingCount = bookings.filter((b) => b.status === "Pending").length;
+    const pendingCount = bookings.filter((b) => b.status === "Pending").length;
+    const confirmedCount = bookings.filter((b) => b.status === "Confirmed").length;
+    const failedCount = bookings.filter((b) => b.status === "Failed").length;
+
+    const statusPriority = { Confirmed: 0, Pending: 1, Failed: 2 };
+    const sortedBookings = [...bookings].sort(
+      (a, b) => statusPriority[a.status] - statusPriority[b.status]
+    );
 
   return (
     <>
@@ -82,7 +89,9 @@ export default function AdminDashboardPage() {
           <div>
             <h1 style={{ fontSize: "1.5rem", color: "#fff", margin: "0 0 0.25rem" }}>Bookings Dashboard</h1>
             <p style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.85rem", margin: 0 }}>
-              {loading ? "Loading…" : `${bookings.length} total · ${pendingCount} pending`}
+              {loading
+                ? "Loading…"
+                : `${bookings.length} total · ${confirmedCount} confirmed · ${pendingCount} pending${failedCount > 0 ? ` · ${failedCount} failed` : ""}`}
             </p>
           </div>
           <Button variant="ghost-light" onClick={logout}>
@@ -119,6 +128,7 @@ export default function AdminDashboardPage() {
                       <th style={{ padding: "0.85rem 1rem", fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: "0.03em", color: "var(--color-text-muted)" }}>Reference</th>
                       <th style={{ padding: "0.85rem 1rem", fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: "0.03em", color: "var(--color-text-muted)" }}>Name</th>
                       <th style={{ padding: "0.85rem 1rem", fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: "0.03em", color: "var(--color-text-muted)" }}>Phone</th>
+                      <th style={{ padding: "0.85rem 1rem", fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: "0.03em", color: "var(--color-text-muted)" }}>Email</th>
                       <th style={{ padding: "0.85rem 1rem", fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: "0.03em", color: "var(--color-text-muted)" }}>Date</th>
                       <th style={{ padding: "0.85rem 1rem", fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: "0.03em", color: "var(--color-text-muted)" }}>Time</th>
                       <th style={{ padding: "0.85rem 1rem", fontSize: "0.78rem", textTransform: "uppercase", letterSpacing: "0.03em", color: "var(--color-text-muted)" }}>Price</th>
@@ -127,7 +137,7 @@ export default function AdminDashboardPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {bookings.map((b) => (
+                    {sortedBookings.map((b) => (
                       <tr
                         key={b.reference}
                         onMouseEnter={() => setHoveredRow(b.reference)}
@@ -146,6 +156,9 @@ export default function AdminDashboardPage() {
                         </td>
                         <td data-label="Phone" style={{ padding: "0.85rem 1rem" }}>
                           {b.phone}
+                        </td>
+                        <td data-label="Email" style={{ padding: "0.85rem 1rem" }}>
+                          {b.email}
                         </td>
                         <td data-label="Date" style={{ padding: "0.85rem 1rem" }}>
                           {b.date}

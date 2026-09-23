@@ -1,5 +1,10 @@
 export default function StatusBadge({ status }) {
-  const isConfirmed = status === "Confirmed";
+  const styles = {
+    Confirmed: { bg: "var(--color-success-bg)", color: "var(--color-success)" },
+    Pending: { bg: "var(--color-pending-bg)", color: "var(--color-pending)" },
+    Failed: { bg: "var(--color-error-bg)", color: "var(--color-error)" },
+  };
+  const s = styles[status] || styles.Pending;
 
   return (
     <span
@@ -9,8 +14,8 @@ export default function StatusBadge({ status }) {
         borderRadius: "999px",
         fontSize: "0.8rem",
         fontWeight: 700,
-        background: isConfirmed ? "var(--color-success-bg)" : "var(--color-pending-bg)",
-        color: isConfirmed ? "var(--color-success)" : "var(--color-pending)",
+        background: s.bg,
+        color: s.color,
       }}
     >
       {status}
