@@ -1,20 +1,21 @@
 import api from "./api";
 
-export async function createBooking({ name, phone, date, startTime, hours }) {
+export async function createBooking({ name, phone, email, date, startTime, hours }) {
   try {
     const response = await api.post("/api/book", {
       name,
       phone,
+      email,
       date,
       start_time: startTime,
       hours,
     });
 
-    const { booking, payment_details } = response.data;
+    const { booking, payment } = response.data;
 
     return {
       ...booking,
-      payment: payment_details,
+      payment,
     };
   } catch (error) {
     const backendMessage = error.response?.data?.error;

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import PageContainer from "../components/layout/PageContainer";
 import Card from "../components/ui/Card";
 import Input from "../components/ui/Input";
@@ -12,11 +11,11 @@ import "react-datepicker/dist/react-datepicker.css";
 const DURATION_OPTIONS = [1, 2, 3, 4, 5];
 
 export default function HomePage() {
-  const navigate = useNavigate();
 
   const [form, setForm] = useState({
     name: "",
     phone: "",
+    email: "",
     date: "",
     startTime: "",
     hours: 1,
@@ -38,6 +37,12 @@ export default function HomePage() {
       newErrors.phone = "Please enter your phone number.";
     } else if (!/^\d{11}$/.test(trimmedPhone)) {
       newErrors.phone = "Phone number must be exactly 11 digits.";
+    }
+    const trimmedEmail = form.email.trim();
+    if (!trimmedEmail) {
+      newErrors.email = "Please enter your email address.";
+    } else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(trimmedEmail)) {
+      newErrors.email = "Please enter a valid email address.";
     }
     if (!form.date) newErrors.date = "Please choose a date.";
     if (!form.startTime) newErrors.startTime = "Please choose a start time.";
@@ -67,7 +72,11 @@ export default function HomePage() {
     setLoading(true);
     try {
       const booking = await createBooking(form);
-      navigate("/confirmation", { state: { booking } });
+      if (booking.payment?.authorization_url) {
+        window.location.href = booking.payment.authorization_url;
+      } else {
+        setSubmitError("Could not start payment. Please try again.");
+      }
     } catch (err) {
       setSubmitError(err.message);
     } finally {
@@ -130,6 +139,14 @@ export default function HomePage() {
                 error={errors.phone}
                 placeholder="e.g. 08123456789"
                 inputMode="numeric"
+              />
+              <Input
+                label="Email Address"
+                type="email"
+                value={form.email}
+                onChange={(e) => handleChange("email", e.target.value)}
+                error={errors.email}
+                placeholder="e.g. munir@example.com"
               />
 
               <div style={{ marginBottom: "1.25rem" }}>

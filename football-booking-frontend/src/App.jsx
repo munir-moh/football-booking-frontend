@@ -8,6 +8,7 @@ import ConfirmationPage from "./pages/ConfirmationPage";
 import AdminLoginPage from "./pages/AdminLoginPage";
 import AdminDashboardPage from "./pages/AdminDashboardPage";
 import ProtectedAdminRoute from "./components/ProtectedAdminRoute";
+import PaymentCallbackPage from "./pages/PaymentCallbackPage";
 
 function AppLayout() {
   const location = useLocation();
@@ -17,6 +18,7 @@ function AppLayout() {
     <>
       <Navbar />
       <Routes>
+        <Route path="/payment-callback" element={<PaymentCallbackPage />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/confirmation" element={<ConfirmationPage />} />
         <Route path="/admin" element={<AdminLoginPage />} />
