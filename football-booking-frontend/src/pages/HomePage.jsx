@@ -7,6 +7,8 @@ import Alert from "../components/ui/Alert";
 import { createBooking } from "../services/bookingService";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { useEffect } from "react";
+import { verifyPayment } from "../services/paymentService";
 
 const DURATION_OPTIONS = [1, 2, 3, 4, 5];
 
@@ -50,6 +52,21 @@ export default function HomePage() {
     return Object.keys(newErrors).length === 0;
   }
 
+  useEffect(() => {
+    function checkAbandonedPayment() {
+      const pendingRef = sessionStorage.getItem("pendingPaymentReference");
+      if (!pendingRef) return;
+
+      sessionStorage.removeItem("pendingPaymentReference");
+      verifyPayment(pendingRef).catch(() => {
+      });
+    }
+
+    checkAbandonedPayment();
+    window.addEventListener("pageshow", checkAbandonedPayment);
+    return () => window.removeEventListener("pageshow", checkAbandonedPayment);
+  }, []);
+  
   function formatDateForForm(date) {
     if (!date) return "";
     const year = date.getFullYear();
@@ -73,6 +90,7 @@ export default function HomePage() {
     try {
       const booking = await createBooking(form);
       if (booking.payment?.authorization_url) {
+        sessionStorage.setItem("pendingPaymentReference", booking.reference);
         window.location.href = booking.payment.authorization_url;
       } else {
         setSubmitError("Could not start payment. Please try again.");
