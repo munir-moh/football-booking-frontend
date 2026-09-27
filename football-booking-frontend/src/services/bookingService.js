@@ -11,12 +11,7 @@ export async function createBooking({ name, phone, email, date, startTime, hours
       hours,
     });
 
-    const { booking, payment } = response.data;
-
-    return {
-      ...booking,
-      payment,
-    };
+    return response.data;
   } catch (error) {
     const backendMessage = error.response?.data?.error;
     throw new Error(backendMessage || "Something went wrong while booking. Please try again.");

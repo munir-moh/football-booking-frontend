@@ -88,10 +88,10 @@ export default function HomePage() {
 
     setLoading(true);
     try {
-      const booking = await createBooking(form);
-      if (booking.payment?.authorization_url) {
-        sessionStorage.setItem("pendingPaymentReference", booking.reference);
-        window.location.href = booking.payment.authorization_url;
+      const result = await createBooking(form);
+      if (result.payment?.authorization_url) {
+        sessionStorage.setItem("pendingPaymentReference", result.reference);
+        window.location.href = result.payment.authorization_url;
       } else {
         setSubmitError("Could not start payment. Please try again.");
       }
