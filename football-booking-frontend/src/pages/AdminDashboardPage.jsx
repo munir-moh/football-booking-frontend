@@ -123,18 +123,6 @@ export default function AdminDashboardPage() {
           {error && <Alert type="error">{error}</Alert>}
 
           <div style={{ marginBottom: "1rem" }}>
-            <label
-              htmlFor="booking-search"
-              style={{
-                display: "block",
-                marginBottom: "0.4rem",
-                fontWeight: 600,
-                fontSize: "0.9rem",
-                color: "var(--color-text)",
-              }}
-            >
-              Search bookings
-            </label>
             <input
               id="booking-search"
               type="search"
