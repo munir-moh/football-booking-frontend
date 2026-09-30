@@ -15,6 +15,7 @@ export default function AdminDashboardPage() {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [confirmingRef, setConfirmingRef] = useState(null);
   const [hoveredRow, setHoveredRow] = useState(null);
   const [deletingRef, setDeletingRef] = useState(null);
@@ -67,14 +68,31 @@ export default function AdminDashboardPage() {
     }
   }
 
-    const pendingCount = bookings.filter((b) => b.status === "Pending").length;
-    const confirmedCount = bookings.filter((b) => b.status === "Confirmed").length;
-    const failedCount = bookings.filter((b) => b.status === "Failed").length;
+  const pendingCount = bookings.filter((b) => b.status === "Pending").length;
+  const confirmedCount = bookings.filter((b) => b.status === "Confirmed").length;
+  const failedCount = bookings.filter((b) => b.status === "Failed").length;
 
-    const statusPriority = { Confirmed: 0, Pending: 1, Failed: 2 };
-    const sortedBookings = [...bookings].sort(
-      (a, b) => statusPriority[a.status] - statusPriority[b.status]
-    );
+  const normalizedSearch = searchQuery.trim().toLowerCase();
+  const normalizedPhoneSearch = normalizedSearch.replace(/\D/g, "");
+  const filteredBookings = normalizedSearch
+    ? bookings.filter((booking) => {
+        const matchesText = [booking.reference, booking.email].some((value) =>
+          String(value || "").toLowerCase().includes(normalizedSearch)
+        );
+        const phone = String(booking.phone || "");
+        const matchesPhone =
+          phone.toLowerCase().includes(normalizedSearch) ||
+          (normalizedPhoneSearch.length > 0 &&
+            phone.replace(/\D/g, "").includes(normalizedPhoneSearch));
+
+        return matchesText || matchesPhone;
+      })
+    : bookings;
+
+  const statusPriority = { Confirmed: 0, Pending: 1, Failed: 2 };
+  const visibleBookings = [...filteredBookings].sort(
+    (a, b) => statusPriority[a.status] - statusPriority[b.status]
+  );
 
   return (
     <>
@@ -104,6 +122,43 @@ export default function AdminDashboardPage() {
         <div style={{ marginTop: "-3.5rem", position: "relative", zIndex: 2 }}>
           {error && <Alert type="error">{error}</Alert>}
 
+          <div style={{ marginBottom: "1rem" }}>
+            <label
+              htmlFor="booking-search"
+              style={{
+                display: "block",
+                marginBottom: "0.4rem",
+                fontWeight: 600,
+                fontSize: "0.9rem",
+                color: "var(--color-text)",
+              }}
+            >
+              Search bookings
+            </label>
+            <input
+              id="booking-search"
+              type="search"
+              value={searchQuery}
+              onChange={(event) => setSearchQuery(event.target.value)}
+              placeholder="Phone number, email or reference code"
+              autoComplete="off"
+              style={{
+                width: "100%",
+                boxSizing: "border-box",
+                padding: "0.7rem 0.9rem",
+                borderRadius: "var(--radius-sm)",
+                border: "1.5px solid var(--color-border)",
+                fontSize: "16px",
+                fontFamily: "var(--font-body)",
+              }}
+            />
+            {normalizedSearch && !loading && (
+              <p role="status" style={{ color: "var(--color-text-muted)", fontSize: "0.82rem", margin: "0.4rem 0 0" }}>
+                {filteredBookings.length} {filteredBookings.length === 1 ? "booking" : "bookings"} found
+              </p>
+            )}
+          </div>
+
           <Card style={{ padding: 0, overflow: "hidden" }}>
             {loading ? (
               <div style={{ display: "flex", justifyContent: "center", padding: "3.5rem" }}>
@@ -111,6 +166,8 @@ export default function AdminDashboardPage() {
               </div>
             ) : bookings.length === 0 ? (
               <EmptyState message="No bookings yet." />
+            ) : visibleBookings.length === 0 ? (
+              <EmptyState message="No bookings match your search." />
             ) : (
               <div style={{ overflowX: "auto" }}>
                 <table
@@ -137,7 +194,7 @@ export default function AdminDashboardPage() {
                     </tr>
                   </thead>
                   <tbody>
-                    {sortedBookings.map((b) => (
+                    {visibleBookings.map((b) => (
                       <tr
                         key={b.reference}
                         onMouseEnter={() => setHoveredRow(b.reference)}
