@@ -9,6 +9,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useEffect } from "react";
 import { verifyPayment } from "../services/paymentService";
+import BookingInfoButton from "../components/booking/BookingInfoButton";
 
 const DURATION_OPTIONS = [1, 2, 3, 4, 5];
 
@@ -225,6 +226,7 @@ export default function HomePage() {
           </Card>
         </div>
       </PageContainer>
+      <BookingInfoButton phoneNumber="+234 906 186 6874" />
     </>
   );
 }
